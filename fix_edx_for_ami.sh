@@ -6,7 +6,7 @@ helpFunction()
    echo ""
    echo "Usage: $0 -p protocol -i instance -d domain"
    echo -e "\t-p protocol of new instance"
-   echo -e "\t-i name of new instance. For blank instance name use value of 'none'."
+   echo -e "\t-i name of new instance. For blank instance name (production) use value of 'none'."
    echo -e "\t-d domain of new instance"
    exit 1 # Exit script after printing help
 }
@@ -28,13 +28,15 @@ then
    helpFunction
 fi
 
-# If instance = 'none' set it to blank, otherwise add '.' on end.
+# If instance = 'none' set it to blank.
 if [ $instance = 'none' ]
 then
    instance='';
-else
-   instance=$instance"."
 fi
+
+# Set studio and lms instance names.
+studioinstance="$instance"studio;
+lmsinstance="$instance"lms;
 
 src=/edx/app/edxapp/lms.env.json
 dest=/edx/app/edxapp/lms.env.json.orig
@@ -50,16 +52,16 @@ else
     sudo cp $src $dest
 fi
 
-sudo sed -i s/\"CMS_BASE\":.*/'"CMS_BASE": "'studio.$instance$domain'",'/ $src
-sudo sed -i s/\"ENTERPRISE_API_URL\":.*/'"ENTERPRISE_API_URL": "'$protocol:\\/\\/$instance$domain\\/enterprise\\/api\\/v1\\/'",'/ $src
-sudo sed -i s/\"ENTERPRISE_ENROLLMENT_API_URL\":.*/'"ENTERPRISE_ENROLLMENT_API_URL": "'$protocol:\\/\\/$instance$domain\\/api\\/enrollment\\/v1\\/'",'/ $src
-sudo sed -i s/\"PREVIEW_LMS_BASE\":.*/'"PREVIEW_LMS_BASE": "'preview.$instance$domain'",'/ $src
-sudo sed -i s/\"JOURNALS_API_URL\":.*/'"JOURNALS_API_URL": "'$protocol:\\/\\/journals-$instance$domain\\/api\\/v1\\/'",'/ $src
-sudo sed -i s/\"LMS_BASE\":.*/'"LMS_BASE": "'$instance$domain'",'/ $src
-sudo sed -i s/\"LMS_INTERNAL_ROOT_URL\":.*/'"LMS_INTERNAL_ROOT_URL": "'$protocol:\\/\\/$instance$domain'",'/ $src
-sudo sed -i s/\"LMS_ROOT_URL\":.*/'"LMS_ROOT_URL": "'$protocol:\\/\\/$instance$domain'",'/ $src
-sudo sed -i s/\"OAUTH_OIDC_ISSUER\":.*/'"OAUTH_OIDC_ISSUER": "'$protocol:\\/\\/$instance$domain\\/oauth2'",'/ $src
-sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$instance$domain'",'/ $src
+sudo sed -i s/\"CMS_BASE\":.*/'"CMS_BASE": "'$studioinstance.$domain'",'/ $src
+sudo sed -i s/\"ENTERPRISE_API_URL\":.*/'"ENTERPRISE_API_URL": "'$protocol:\\/\\/$lmsinstance.$domain\\/enterprise\\/api\\/v1\\/'",'/ $src
+sudo sed -i s/\"ENTERPRISE_ENROLLMENT_API_URL\":.*/'"ENTERPRISE_ENROLLMENT_API_URL": "'$protocol:\\/\\/$lmsinstance.$domain\\/api\\/enrollment\\/v1\\/'",'/ $src
+sudo sed -i s/\"PREVIEW_LMS_BASE\":.*/'"PREVIEW_LMS_BASE": "'preview.$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"JOURNALS_API_URL\":.*/'"JOURNALS_API_URL": "'$protocol:\\/\\/journals-$lmsinstance.$domain\\/api\\/v1\\/'",'/ $src
+sudo sed -i s/\"LMS_BASE\":.*/'"LMS_BASE": "'$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"LMS_INTERNAL_ROOT_URL\":.*/'"LMS_INTERNAL_ROOT_URL": "'$protocol:\\/\\/$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"LMS_ROOT_URL\":.*/'"LMS_ROOT_URL": "'$protocol:\\/\\/$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"OAUTH_OIDC_ISSUER\":.*/'"OAUTH_OIDC_ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
+sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$lmsinstance.$domain'",'/ $src
 
 printf "Done with $src\n"
 printf "\n********************************\n"
@@ -80,16 +82,16 @@ else
 fi
 
 
-sudo sed -i s/\"CMS_BASE\":.*/'"CMS_BASE": "'studio.$instance$domain'",'/ $src
-sudo sed -i s/\"ENTERPRISE_API_URL\":.*/'"ENTERPRISE_API_URL": "'$protocol:\\/\\/$instance$domain\\/enterprise\\/api\\/v1\\/'",'/ $src
-sudo sed -i s/\"PREVIEW_LMS_BASE\":.*/'"PREVIEW_LMS_BASE": "'$instance$domain'",'/ $src
-sudo sed -i s/\"JOURNALS_API_URL\":.*/'"JOURNALS_API_URL": "'$protocol:\\/\\/journals-$instance$domain\\/api\\/v1\\/'",'/ $src
-sudo sed -i s/\"JOURNALS_URL_ROOT\":.*/'"JOURNALS_URL_ROOT": "'$protocol:\\/\\/journals-$instance$domain'",'/ $src
-sudo sed -i s/\"LMS_BASE\":.*/'"LMS_BASE": "'$instance$domain'",'/ $src
-sudo sed -i s/\"LMS_INTERNAL_ROOT_URL\":.*/'"LMS_INTERNAL_ROOT_URL": "'$protocol:\\/\\/$instance$domain'",'/ $src
-sudo sed -i s/\"LMS_ROOT_URL\":.*/'"LMS_ROOT_URL": "'$protocol:\\/\\/$instance$domain'",'/ $src
-sudo sed -i s/\"OAUTH_OIDC_ISSUER\":.*/'"OAUTH_OIDC_ISSUER": "'$protocol:\\/\\/$instance$domain\\/oauth2'",'/ $src
-sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$instance$domain'",'/ $src
+sudo sed -i s/\"CMS_BASE\":.*/'"CMS_BASE": "'$studioinstance.$domain'",'/ $src
+sudo sed -i s/\"ENTERPRISE_API_URL\":.*/'"ENTERPRISE_API_URL": "'$protocol:\\/\\/$lmsinstance.$domain\\/enterprise\\/api\\/v1\\/'",'/ $src
+sudo sed -i s/\"PREVIEW_LMS_BASE\":.*/'"PREVIEW_LMS_BASE": "'$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"JOURNALS_API_URL\":.*/'"JOURNALS_API_URL": "'$protocol:\\/\\/journals-$lmsinstance.$domain\\/api\\/v1\\/'",'/ $src
+sudo sed -i s/\"JOURNALS_URL_ROOT\":.*/'"JOURNALS_URL_ROOT": "'$protocol:\\/\\/journals-$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"LMS_BASE\":.*/'"LMS_BASE": "'$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"LMS_INTERNAL_ROOT_URL\":.*/'"LMS_INTERNAL_ROOT_URL": "'$protocol:\\/\\/$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"LMS_ROOT_URL\":.*/'"LMS_ROOT_URL": "'$protocol:\\/\\/$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"OAUTH_OIDC_ISSUER\":.*/'"OAUTH_OIDC_ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
+sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$lmsinstance.$domain'",'/ $src
 
 printf "Done with $src\n"
 printf "\n********************************\n"
@@ -109,9 +111,9 @@ else
 fi
 
 sudo sed -i '/server_name.*/ s/^#*/#/' $src
-sudo sed -i 0,/.*server_name.*/s/.*server_name.*/"  server_name studio.$instance$domain;"/ $src
-if (( $(grep -c "server_name studio.$instance$domain;" $src) )); then
-    sudo sed -i "/server_name studio.$instance$domain;.*/a \  \server_name *.studio.$instance$domain;," $src
+sudo sed -i 0,/.*server_name.*/s/.*server_name.*/"  server_name $studioinstance.$domain;"/ $src
+if (( $(grep -c "server_name $studioinstance.$domain;" $src) )); then
+    sudo sed -i "/server_name $studioinstance.$domain;.*/a \  \server_name *.$studioinstance.$domain;," $src
 fi
 sudo sed -i s'/listen 18010 ;/listen 80 ;/' $src
 
