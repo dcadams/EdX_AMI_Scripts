@@ -96,8 +96,8 @@ sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$lmsinstance.$domain'",'/ $src
 printf "Done with $src\n"
 printf "\n********************************\n"
 
-src=/edx/app/nginx/sites-enabled/cms
-dest=/edx/app/nginx/sites-enabled/cms.orig
+src=/edx/app/nginx/sites-available/cms
+dest=/edx/app/nginx/sites-available/cms.orig
 
 printf "\n\n********************************\n"
 printf "Working on $src\n"
