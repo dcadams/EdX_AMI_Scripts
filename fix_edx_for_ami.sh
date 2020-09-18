@@ -171,7 +171,7 @@ else
 fi
 
 sudo sed -i s/\"city\":.*/'"city": "hidden"',/ $src
-sudo sed -i s/\"confirm_email\":.*/'"conform_email": "hidden"',/ $src
+sudo sed -i s/\"confirm_email\":.*/'"confirm_email": "hidden"',/ $src
 sudo sed -i s/\"country\":.*/'"country": "hidden"',/ $src
 sudo sed -i s/\"gender\":.*/'"gender": "hidden"',/ $src
 sudo sed -i s/\"goals\":.*/'"goals": "hidden"',/ $src
@@ -179,7 +179,7 @@ sudo sed -i s/\"honor_code\":.*/'"honor_code": "hidden"',/ $src
 sudo sed -i s/\"level_of_education\":.*/'"level_of_education": "hidden"',/ $src
 sudo sed -i s/\"mailing_address\":.*/'"mailing_address": "hidden"',/ $src
 sudo sed -i s/\"terms_of_service\":.*/'"terms_of_service": "hidden"',/ $src
-sudo sed -i s/\"year_of_birth\":.*/'"year_of_birth": "hidden"',/ $src
+sudo sed -i s/\"year_of_birth\":.*/'"year_of_birth": "hidden"'/ $src
 
 printf "Done with $src\n"
 printf "\n********************************\n"
