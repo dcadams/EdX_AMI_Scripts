@@ -112,8 +112,8 @@ fi
 
 sudo sed -i '/server_name.*/ s/^#*/#/' $src
 sudo sed -i 0,/.*server_name.*/s/.*server_name.*/"  server_name $studioinstance.$domain;"/ $src
-if (( $(grep -c "server_name $studioinstance.$domain;" $src) )); then
-    sudo sed -i "/server_name $studioinstance.$domain;.*/a \  \server_name *.$studioinstance.$domain;," $src
+if (( $(sudo grep -c "server_name $studioinstance.$domain;" $src) )); then
+    sudo sed -i "/server_name $studioinstance.$domain;.*/a \  \server_name *.$studioinstance.$domain;" $src
 fi
 sudo sed -i s'/listen 18010 ;/listen 80 ;/' $src
 
