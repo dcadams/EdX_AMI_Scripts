@@ -62,6 +62,8 @@ sudo sed -i s/\"LMS_INTERNAL_ROOT_URL\":.*/'"LMS_INTERNAL_ROOT_URL": "'$protocol
 sudo sed -i s/\"LMS_ROOT_URL\":.*/'"LMS_ROOT_URL": "'$protocol:\\/\\/$lmsinstance.$domain'",'/ $src
 sudo sed -i s/\"OAUTH_OIDC_ISSUER\":.*/'"OAUTH_OIDC_ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
 sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"ENABLE_MOBILE_REST_API\":.*/'"ENABLE_MOBILE_REST_API": true,'/ $src
+sudo sed -i s/\"ENABLE_HTML_XBLOCK_STUDENT_VIEW_DATA\":.*/'"ENABLE_HTML_XBLOCK_STUDENT_VIEW_DATA": true,'/ $src
 
 printf "Done with $src\n"
 printf "\n********************************\n"
@@ -148,6 +150,8 @@ else
     sudo cp $src $dest
 fi
 
+sudo sed -i s/\'ENABLE_MOBILE_REST_API\':.*/"\'ENABLE_MOBILE_REST_API\': True,"/ $src
+sudo sed -i s/\'ENABLE_HTML_XBLOCK_STUDENT_VIEW_DATA\':.*/"\'ENABLE_HTML_XBLOCK_STUDENT_VIEW_DATA\': True,"/ $src
 sudo sed -i s/\'ENABLE_THIRD_PARTY_AUTH\':.*/"\'ENABLE_THIRD_PARTY_AUTH\': True,"/ $src
 if (( ! $(grep -c "third_party_auth.backends.KeycloakOAuth2" $src) )); then
     sudo sed -i "/^AUTHENTICATION_BACKENDS.*/a \    \'third_party_auth.backends.KeycloakOAuth2'," $src
