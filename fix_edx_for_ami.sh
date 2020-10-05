@@ -64,6 +64,19 @@ sudo sed -i s/\"OAUTH_OIDC_ISSUER\":.*/'"OAUTH_OIDC_ISSUER": "'$protocol:\\/\\/$
 sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$lmsinstance.$domain'",'/ $src
 sudo sed -i s/\"ENABLE_MOBILE_REST_API\":.*/'"ENABLE_MOBILE_REST_API": true,'/ $src
 sudo sed -i s/\"ENABLE_HTML_XBLOCK_STUDENT_VIEW_DATA\":.*/'"ENABLE_HTML_XBLOCK_STUDENT_VIEW_DATA": true,'/ $src
+sudo sed -i s/\"CORS_ORIGIN_ALLOW_ALL\":.*/'"CORS_ORIGIN_ALLOW_ALL": true,'/ $src
+sudo sed -i s/\"ENABLE_CORS_HEADERS\":.*/'"ENABLE_CORS_HEADERS": true,'/ $src
+sudo sed -i s/\"OAUTH_ENFORCE_SECURE\":.*/'"OAUTH_ENFORCE_SECURE": true,'/ $src
+sudo sed -i s/\"JWT_ISSUER\":.*/'"JWT_ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
+sudo sed -i s/\"ISSUER\":.*/'"ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
+sudo sed -i s/\"X_FRAME_OPTIONS\":.*/'"X_FRAME_OPIONS": "SAMEORIGIN",'/ $src
+
+
+if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
+    sed -i '/LOGIN_REDIRECT_WHITELIST/{n;d;}' $src
+	sudo sed -i "/LOGIN_REDIRECT_WHITELIST.*/a \        \"$studioinstance.$domain\"" $src
+fi
+
 
 printf "Done with $src\n"
 printf "\n********************************\n"
@@ -95,7 +108,20 @@ sudo sed -i s/\"LMS_ROOT_URL\":.*/'"LMS_ROOT_URL": "'$protocol:\\/\\/$lmsinstanc
 sudo sed -i s/\"OAUTH_OIDC_ISSUER\":.*/'"OAUTH_OIDC_ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
 sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$lmsinstance.$domain'",'/ $src
 
+
+if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
+    sed -i '/LOGIN_REDIRECT_WHITELIST/{n;d;}' $src
+	sudo sed -i "/LOGIN_REDIRECT_WHITELIST.*/a \        \"$studioinstance.$domain\"" $src
+fi
+
 printf "Done with $src\n"
+printf "\n********************************\n"
+
+printf "\n\n********************************\n"
+printf "Generating RSA key\n"
+sudo openssl req -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -out example.crt -keyout example.key -subj "/CN=$instance.$domain"
+
+printf "Done with generating RSA key\n"
 printf "\n********************************\n"
 
 src=/edx/app/nginx/sites-available/cms
@@ -117,7 +143,38 @@ sudo sed -i 0,/.*server_name.*/s/.*server_name.*/"  server_name $studioinstance.
 if (( $(sudo grep -c "server_name $studioinstance.$domain;" $src) )); then
     sudo sed -i "/server_name $studioinstance.$domain;.*/a \  \server_name *.$studioinstance.$domain;" $src
 fi
-sudo sed -i s'/listen 18010 ;/listen 80 ;/' $src
+sudo sed -i s'/listen 18010 ;/listen 443 ssl;/' $src
+
+if (( $(sudo grep -c "listen 443 ssl;" $src) )); then
+	sudo sed -i "/listen 443 ssl;/a \  \ssl_certificate_key/etc/nginx/key;" $src
+	sudo sed -i "/listen 443 ssl;/a \  \ssl_certificate /etc/nginx/cert;" $src
+	sudo sed -i "/listen 443 ssl;/a \ \ " $src
+fi
+
+printf "Done with $src\n"
+printf "\n********************************\n"
+
+src=/edx/app/nginx/sites-available/lms
+dest=/edx/app/nginx/sites-available/lms.orig
+
+printf "\n\n********************************\n"
+printf "Working on $src\n"
+printf "source file = $src\n"
+
+if [ -f "$dest" ]; then
+    printf "$dest exists, not overwriting.\n"
+else
+    printf "copying $src to $dest to keep an original copy\n"
+    sudo cp $src $dest
+fi
+
+sudo sed -i s'/listen 80 default_server;/listen 443 ssl default_server;/' $src
+
+if (( $(sudo grep -c "listen 443 ssl default_server;" $src) )); then
+	sudo sed -i "/listen 443 ssl default_server;/a \  \ssl_certificate_key/etc/nginx/key;" $src
+	sudo sed -i "/listen 443 ssl default_server;/a \  \ssl_certificate /etc/nginx/cert;" $src
+	sudo sed -i "/listen 443 ssl default_server;/a \ \ " $src
+fi
 
 printf "Done with $src\n"
 printf "\n********************************\n"
@@ -136,11 +193,36 @@ printf "Moved $src to $dest\n"
 sudo -Hu edxapp /edx/bin/pip.edxapp install git+https://github.com/cisco-ibleducation/cisco-third-party-auth-master
 
 printf "Installed cisco-third-party-auth from IBL repo.\n"
+printf "\n********************************\n"
+
+src=/edx/app/edxapp/edx-platform/cms/envs/common.py
+dest=/edx/app/edxapp/edx-platform/cms/envs/common.py.orig
+
+printf "\n\n********************************\n"
+printf "Working on $src\n"
+printf "source file = $src\n"
+
+if [ -f "$dest" ]; then
+    printf "$dest exists, not overwriting.\n"
+else
+    printf "copying $src to $dest to keep an original copy\n"
+    sudo cp $src $dest
+fi
+
+sudo sed -i s/MANAGER_BASE_URL.*/"MANAGER_BASE_URL = \'$protocol:\\/\\/manager.$lmsinstance.$domain'"/ $src
+sudo sed -i s/"# IBL_CALENDAR_FRONTEND_URL.*"/"IBL_CALENDAR_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/calendar\\/'"/ $src
+sudo sed -i s/"# IBL_BADGE_FRONTEND_URL.*"/"IBL_BADGE_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/credentials\\/'"/ $src
+sudo sed -i s/"# IBL_WEBEX_ADMIN_FRONTEND_URL.*"/"IBL_WEBEX_ADMIN_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/webex-auth\\/'"/ $src
+
+printf "Done with $src\n"
+printf "\n********************************\n"
 
 
 src=/edx/app/edxapp/edx-platform/lms/envs/common.py
 dest=/edx/app/edxapp/edx-platform/lms/envs/common.py.orig
 
+printf "\n\n********************************\n"
+printf "Working on $src\n"
 printf "source file = $src\n"
 
 if [ -f "$dest" ]; then
@@ -153,7 +235,15 @@ fi
 sudo sed -i s/\'ENABLE_MOBILE_REST_API\':.*/"\'ENABLE_MOBILE_REST_API\': True,"/ $src
 sudo sed -i s/\'ENABLE_HTML_XBLOCK_STUDENT_VIEW_DATA\':.*/"\'ENABLE_HTML_XBLOCK_STUDENT_VIEW_DATA\': True,"/ $src
 sudo sed -i s/\'ENABLE_THIRD_PARTY_AUTH\':.*/"\'ENABLE_THIRD_PARTY_AUTH\': True,"/ $src
-if (( ! $(grep -c "third_party_auth.backends.KeycloakOAuth2" $src) )); then
+sudo sed -i s/MANAGER_BASE_URL.*/"MANAGER_BASE_URL = \'$protocol:\\/\\/manager.$lmsinstance.$domain'"/ $src
+sudo sed -i s/"# IBL_CALENDAR_FRONTEND_URL.*"/"IBL_CALENDAR_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/calendar\\/'"/ $src
+sudo sed -i s/"# IBL_BADGE_FRONTEND_URL.*"/"IBL_BADGE_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/credentials\\/'"/ $src
+sudo sed -i s/"# IBL_WEBEX_ADMIN_FRONTEND_URL.*"/"IBL_WEBEX_ADMIN_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/webex-auth\\/'"/ $src
+sudo sed -i s/IBL_ALLOW_CALENDAR_IFRAME.*/"IBL_ALLOW_CALENDAR_IFRAME = True"/ $src
+sudo sed -i s/IBL_ALLOW_BADGE_IFRAME.*/"IBL_ALLOW_BADGE_IFRAME = True"/ $src
+
+
+if (( ! $(sudo grep -c "third_party_auth.backends.KeycloakOAuth2" $src) )); then
     sudo sed -i "/^AUTHENTICATION_BACKENDS.*/a \    \'third_party_auth.backends.KeycloakOAuth2'," $src
 fi
 
@@ -209,6 +299,8 @@ printf "\n********************************\n"
 printf "PLEASE READ THIS.\n"
 printf "Done with all the file modifications\n"
 printf "Steps yet to be done:\n"
+printf "Additional steps configuring Calendar and Badging at bottom of cms/envs/common.py and lms/envs/common.py\n"
+
 printf "Restart supervisor and nginx\n"
 printf "Configure Django Admin\n"
 printf "Configure Keycloak\n"
