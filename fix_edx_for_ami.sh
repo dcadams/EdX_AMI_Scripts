@@ -70,6 +70,16 @@ sudo sed -i s/\"OAUTH_ENFORCE_SECURE\":.*/'"OAUTH_ENFORCE_SECURE": true,'/ $src
 sudo sed -i s/\"JWT_ISSUER\":.*/'"JWT_ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
 sudo sed -i s/\"ISSUER\":.*/'"ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
 sudo sed -i s/\"X_FRAME_OPTIONS\":.*/'"X_FRAME_OPIONS": "SAMEORIGIN",'/ $src
+sudo sed -i s/\"city\":.*/'"city": "hidden"',/ $src
+sudo sed -i s/\"confirm_email\":.*/'"confirm_email": "hidden"',/ $src
+sudo sed -i s/\"country\":.*/'"country": "hidden"',/ $src
+sudo sed -i s/\"gender\":.*/'"gender": "hidden"',/ $src
+sudo sed -i s/\"goals\":.*/'"goals": "hidden"',/ $src
+sudo sed -i s/\"honor_code\":.*/'"honor_code": "hidden"',/ $src
+sudo sed -i s/\"level_of_education\":.*/'"level_of_education": "hidden"',/ $src
+sudo sed -i s/\"mailing_address\":.*/'"mailing_address": "hidden"',/ $src
+sudo sed -i s/\"terms_of_service\":.*/'"terms_of_service": "hidden"',/ $src
+sudo sed -i s/\"year_of_birth\":.*/'"year_of_birth": "hidden"'/ $src
 
 
 if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
@@ -246,34 +256,6 @@ sudo sed -i s/IBL_ALLOW_BADGE_IFRAME.*/"IBL_ALLOW_BADGE_IFRAME = True"/ $src
 if (( ! $(sudo grep -c "third_party_auth.backends.KeycloakOAuth2" $src) )); then
     sudo sed -i "/^AUTHENTICATION_BACKENDS.*/a \    \'third_party_auth.backends.KeycloakOAuth2'," $src
 fi
-
-printf "Done with $src\n"
-printf "\n********************************\n"
-
-src=/edx/app/edxapp/lms.env.json
-dest=/edx/app/edxapp/lms.env.json.orig
-
-printf "\n\n********************************\n"
-printf "Working on $src\n"
-printf "source file = $src\n"
-
-if [ -f "$dest" ]; then
-    printf "$dest exists, not overwriting.\n"
-else
-    printf "copying $src to $dest to keep an original copy\n"
-    sudo cp $src $dest
-fi
-
-sudo sed -i s/\"city\":.*/'"city": "hidden"',/ $src
-sudo sed -i s/\"confirm_email\":.*/'"confirm_email": "hidden"',/ $src
-sudo sed -i s/\"country\":.*/'"country": "hidden"',/ $src
-sudo sed -i s/\"gender\":.*/'"gender": "hidden"',/ $src
-sudo sed -i s/\"goals\":.*/'"goals": "hidden"',/ $src
-sudo sed -i s/\"honor_code\":.*/'"honor_code": "hidden"',/ $src
-sudo sed -i s/\"level_of_education\":.*/'"level_of_education": "hidden"',/ $src
-sudo sed -i s/\"mailing_address\":.*/'"mailing_address": "hidden"',/ $src
-sudo sed -i s/\"terms_of_service\":.*/'"terms_of_service": "hidden"',/ $src
-sudo sed -i s/\"year_of_birth\":.*/'"year_of_birth": "hidden"'/ $src
 
 printf "Done with $src\n"
 printf "\n********************************\n"
