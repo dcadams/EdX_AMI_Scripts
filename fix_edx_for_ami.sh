@@ -119,7 +119,7 @@ printf "\n********************************\n"
 
 printf "\n\n********************************\n"
 printf "Generating RSA key\n"
-sudo openssl req -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -out example.crt -keyout example.key -subj "/CN=$instance.$domain"
+sudo openssl req -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -out /etc/nginx/cert -keyout /etc/nginx/key -subj "/CN=$instance.$domain"
 
 printf "Done with generating RSA key\n"
 printf "\n********************************\n"
@@ -146,7 +146,7 @@ fi
 sudo sed -i s'/listen 18010 ;/listen 443 ssl;/' $src
 
 if (( $(sudo grep -c "listen 443 ssl;" $src) )); then
-	sudo sed -i "/listen 443 ssl;/a \  \ssl_certificate_key/etc/nginx/key;" $src
+	sudo sed -i "/listen 443 ssl;/a \  \ssl_certificate_key /etc/nginx/key;" $src
 	sudo sed -i "/listen 443 ssl;/a \  \ssl_certificate /etc/nginx/cert;" $src
 	sudo sed -i "/listen 443 ssl;/a \ \ " $src
 fi
@@ -171,7 +171,7 @@ fi
 sudo sed -i s'/listen 80 default_server;/listen 443 ssl default_server;/' $src
 
 if (( $(sudo grep -c "listen 443 ssl default_server;" $src) )); then
-	sudo sed -i "/listen 443 ssl default_server;/a \  \ssl_certificate_key/etc/nginx/key;" $src
+	sudo sed -i "/listen 443 ssl default_server;/a \  \ssl_certificate_key /etc/nginx/key;" $src
 	sudo sed -i "/listen 443 ssl default_server;/a \  \ssl_certificate /etc/nginx/cert;" $src
 	sudo sed -i "/listen 443 ssl default_server;/a \ \ " $src
 fi
