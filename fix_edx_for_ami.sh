@@ -73,8 +73,8 @@ sudo sed -i s/\"X_FRAME_OPTIONS\":.*/'"X_FRAME_OPIONS": "SAMEORIGIN",'/ $src
 
 
 if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
-    sed -i '/LOGIN_REDIRECT_WHITELIST/{n;d;}' $src
-	sudo sed -i "/LOGIN_REDIRECT_WHITELIST.*/a \        \"$studioinstance.$domain\"" $src
+    sudo sed -i '/LOGIN_REDIRECT_WHITELIST/{n;d;}' $src
+    sudo sed -i "/LOGIN_REDIRECT_WHITELIST.*/a \        \"$studioinstance.$domain\"" $src
 fi
 
 
@@ -110,8 +110,8 @@ sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$lmsinstance.$domain'",'/ $src
 
 
 if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
-    sed -i '/LOGIN_REDIRECT_WHITELIST/{n;d;}' $src
-	sudo sed -i "/LOGIN_REDIRECT_WHITELIST.*/a \        \"$studioinstance.$domain\"" $src
+    sudo sed -i '/LOGIN_REDIRECT_WHITELIST/{n;d;}' $src
+    sudo sed -i "/LOGIN_REDIRECT_WHITELIST.*/a \        \"$studioinstance.$domain\"" $src
 fi
 
 printf "Done with $src\n"
