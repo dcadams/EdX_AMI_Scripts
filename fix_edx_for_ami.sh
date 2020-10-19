@@ -220,9 +220,10 @@ else
 fi
 
 sudo sed -i s/MANAGER_BASE_URL.*/"MANAGER_BASE_URL = \'$protocol:\\/\\/manager.$lmsinstance.$domain'"/ $src
-sudo sed -i s/"# IBL_CALENDAR_FRONTEND_URL.*"/"IBL_CALENDAR_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/calendar\\/'"/ $src
-sudo sed -i s/"# IBL_BADGE_FRONTEND_URL.*"/"IBL_BADGE_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/credentials\\/'"/ $src
-sudo sed -i s/"# IBL_WEBEX_ADMIN_FRONTEND_URL.*"/"IBL_WEBEX_ADMIN_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/webex-auth\\/'"/ $src
+sudo sed -i s/"# IBL_WEBEX_REDIRECT_URI.*"/"IBL_WEBEX_REDIRECT_URI = \'$protocol:\\/\\/interactive.$instance.$domain\\/oauth\\/redirect\\/webex'"/ $src
+sudo sed -i s/"# IBL_CALENDAR_FRONTEND_URL.*"/"IBL_CALENDAR_FRONTEND_URL = \'$protocol:\\/\\/interactive.$instance.$domain\\/calendar\\/'"/ $src
+sudo sed -i s/"# IBL_BADGE_FRONTEND_URL.*"/"IBL_BADGE_FRONTEND_URL = \'$protocol:\\/\\/interactive.$instance.$domain\\/credentials\\/'"/ $src
+sudo sed -i s/"# IBL_WEBEX_ADMIN_FRONTEND_URL.*"/"IBL_WEBEX_ADMIN_FRONTEND_URL = \'$protocol:\\/\\/interactive.$instance.$domain\\/webex-auth\\/'"/ $src
 
 printf "Done with $src\n"
 printf "\n********************************\n"
@@ -246,9 +247,10 @@ sudo sed -i s/\'ENABLE_MOBILE_REST_API\':.*/"\'ENABLE_MOBILE_REST_API\': True,"/
 sudo sed -i s/\'ENABLE_HTML_XBLOCK_STUDENT_VIEW_DATA\':.*/"\'ENABLE_HTML_XBLOCK_STUDENT_VIEW_DATA\': True,"/ $src
 sudo sed -i s/\'ENABLE_THIRD_PARTY_AUTH\':.*/"\'ENABLE_THIRD_PARTY_AUTH\': True,"/ $src
 sudo sed -i s/MANAGER_BASE_URL.*/"MANAGER_BASE_URL = \'$protocol:\\/\\/manager.$lmsinstance.$domain'"/ $src
-sudo sed -i s/"# IBL_CALENDAR_FRONTEND_URL.*"/"IBL_CALENDAR_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/calendar\\/'"/ $src
-sudo sed -i s/"# IBL_BADGE_FRONTEND_URL.*"/"IBL_BADGE_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/credentials\\/'"/ $src
-sudo sed -i s/"# IBL_WEBEX_ADMIN_FRONTEND_URL.*"/"IBL_WEBEX_ADMIN_FRONTEND_URL = \'$protocol:\\/\\/interactive.$lmsinstance.$domain\\/webex-auth\\/'"/ $src
+sudo sed -i s/"# IBL_WEBEX_REDIRECT_URI.*"/"IBL_WEBEX_REDIRECT_URI = \'$protocol:\\/\\/interactive.$instance.$domain\\/oauth\\/redirect\\/webex'"/ $src
+sudo sed -i s/"# IBL_CALENDAR_FRONTEND_URL.*"/"IBL_CALENDAR_FRONTEND_URL = \'$protocol:\\/\\/interactive.$instance.$domain\\/calendar\\/'"/ $src
+sudo sed -i s/"# IBL_BADGE_FRONTEND_URL.*"/"IBL_BADGE_FRONTEND_URL = \'$protocol:\\/\\/interactive.$instance.$domain\\/credentials\\/'"/ $src
+sudo sed -i s/"# IBL_WEBEX_ADMIN_FRONTEND_URL.*"/"IBL_WEBEX_ADMIN_FRONTEND_URL = \'$protocol:\\/\\/interactive.$instance.$domain\\/webex-auth\\/'"/ $src
 sudo sed -i s/IBL_ALLOW_CALENDAR_IFRAME.*/"IBL_ALLOW_CALENDAR_IFRAME = True"/ $src
 sudo sed -i s/IBL_ALLOW_BADGE_IFRAME.*/"IBL_ALLOW_BADGE_IFRAME = True"/ $src
 
