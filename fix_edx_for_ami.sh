@@ -80,6 +80,7 @@ sudo sed -i s/\"level_of_education\":.*/'"level_of_education": "hidden"',/ $src
 sudo sed -i s/\"mailing_address\":.*/'"mailing_address": "hidden"',/ $src
 sudo sed -i s/\"terms_of_service\":.*/'"terms_of_service": "hidden"',/ $src
 sudo sed -i s/\"year_of_birth\":.*/'"year_of_birth": "hidden"'/ $src
+sudo sed -i s/\"DEFAULT_MOBILE_AVAILABLE\":.*/'"DEFAULT_MOBILE_AVAILABLE": true,'/ $src
 
 
 if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
@@ -117,6 +118,7 @@ sudo sed -i s/\"LMS_INTERNAL_ROOT_URL\":.*/'"LMS_INTERNAL_ROOT_URL": "'$protocol
 sudo sed -i s/\"LMS_ROOT_URL\":.*/'"LMS_ROOT_URL": "'$protocol:\\/\\/$lmsinstance.$domain'",'/ $src
 sudo sed -i s/\"OAUTH_OIDC_ISSUER\":.*/'"OAUTH_OIDC_ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
 sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$lmsinstance.$domain'",'/ $src
+sudo sed -i s/\"DEFAULT_MOBILE_AVAILABLE\":.*/'"DEFAULT_MOBILE_AVAILABLE": true,'/ $src
 
 
 if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
