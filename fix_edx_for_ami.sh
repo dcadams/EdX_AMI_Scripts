@@ -81,7 +81,9 @@ sudo sed -i s/\"mailing_address\":.*/'"mailing_address": "hidden"',/ $src
 sudo sed -i s/\"terms_of_service\":.*/'"terms_of_service": "hidden"',/ $src
 sudo sed -i s/\"year_of_birth\":.*/'"year_of_birth": "hidden"'/ $src
 sudo sed -i s/\"DEFAULT_MOBILE_AVAILABLE\":.*/'"DEFAULT_MOBILE_AVAILABLE": true,'/ $src
-
+sudo sed -i s/\"EDXNOTES_INTERNAL_API\":.*/'"EDXNOTES_INTERNAL_API": "'$protocol:\\/\\/notes.$instance.$domain\\/api\\/v1'",'/ $src
+sudo sed -i s/\"EDXNOTES_PUBLIC_API\":.*/'"EDXNOTES_PUBLIC_API": "'$protocol:\\/\\/notes.$instance.$domain\\/api\\/v1'",'/ $src
+sudo sed -i s/\"ENABLE_EDXNOTES\":.*/'"ENABLE_EDXNOTES": true,'/ $src
 
 if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
     sudo sed -i '/LOGIN_REDIRECT_WHITELIST/{n;d;}' $src
