@@ -288,8 +288,7 @@ printf "PLEASE READ THIS.\n"
 printf "Done with all the file modifications\n"
 printf "Steps yet to be done:\n"
 printf "Additional steps configuring Calendar and Badging at bottom of cms/envs/common.py and lms/envs/common.py\n"
-
+printf "Copy static files from old server to new server\n"
 printf "Restart supervisor and nginx\n"
 printf "Configure Django Admin\n"
 printf "Configure Keycloak\n"
-
