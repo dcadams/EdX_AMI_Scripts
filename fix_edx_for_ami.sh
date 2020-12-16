@@ -69,7 +69,7 @@ sudo sed -i s/\"ENABLE_CORS_HEADERS\":.*/'"ENABLE_CORS_HEADERS": true,'/ $src
 sudo sed -i s/\"OAUTH_ENFORCE_SECURE\":.*/'"OAUTH_ENFORCE_SECURE": true,'/ $src
 sudo sed -i s/\"JWT_ISSUER\":.*/'"JWT_ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
 sudo sed -i s/\"ISSUER\":.*/'"ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
-sudo sed -i s/\"X_FRAME_OPTIONS\":.*/'"X_FRAME_OPIONS": "SAMEORIGIN",'/ $src
+sudo sed -i s/\"X_FRAME_OPTIONS\":.*/'"X_FRAME_OPTIONS": "ALLOW",'/ $src
 sudo sed -i s/\"city\":.*/'"city": "hidden"',/ $src
 sudo sed -i s/\"confirm_email\":.*/'"confirm_email": "hidden"',/ $src
 sudo sed -i s/\"country\":.*/'"country": "hidden"',/ $src
@@ -121,6 +121,7 @@ sudo sed -i s/\"LMS_ROOT_URL\":.*/'"LMS_ROOT_URL": "'$protocol:\\/\\/$lmsinstanc
 sudo sed -i s/\"OAUTH_OIDC_ISSUER\":.*/'"OAUTH_OIDC_ISSUER": "'$protocol:\\/\\/$lmsinstance.$domain\\/oauth2'",'/ $src
 sudo sed -i s/\"SITE_NAME\":.*/'"SITE_NAME": "'$lmsinstance.$domain'",'/ $src
 sudo sed -i s/\"DEFAULT_MOBILE_AVAILABLE\":.*/'"DEFAULT_MOBILE_AVAILABLE": true,'/ $src
+sudo sed -i s/\"X_FRAME_OPTIONS\":.*/'"X_FRAME_OPTIONS": "ALLOW",'/ $src
 
 
 if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
