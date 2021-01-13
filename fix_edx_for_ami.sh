@@ -90,6 +90,9 @@ if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
     sudo sed -i "/LOGIN_REDIRECT_WHITELIST.*/a \        \"$studioinstance.$domain\"" $src
 fi
 
+if (( $(sudo grep -c "SESSION_COOKIE_SECURE" $src) )); then
+	sudo sed -i "/SESSION_COOKIE_SECURE.*/a \    \"SESSION_ENGINE\": \"django.contrib.sessions.backends.cached_db\"," $src
+fi
 
 printf "Done with $src\n"
 printf "\n********************************\n"
@@ -127,6 +130,10 @@ sudo sed -i s/\"X_FRAME_OPTIONS\":.*/'"X_FRAME_OPTIONS": "ALLOW",'/ $src
 if (( $(sudo grep -c "LOGIN_REDIRECT_WHITELIST" $src) )); then
     sudo sed -i '/LOGIN_REDIRECT_WHITELIST/{n;d;}' $src
     sudo sed -i "/LOGIN_REDIRECT_WHITELIST.*/a \        \"$studioinstance.$domain\"" $src
+fi
+
+if (( $(sudo grep -c "SESSION_COOKIE_SECURE" $src) )); then
+	sudo sed -i "/SESSION_COOKIE_SECURE.*/a \    \"SESSION_ENGINE\": \"django.contrib.sessions.backends.cached_db\"," $src
 fi
 
 printf "Done with $src\n"
