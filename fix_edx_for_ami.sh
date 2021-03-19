@@ -285,11 +285,21 @@ printf "Reestarting supervisor.\n"
 
 printf "Restarted lms and cms supervisors.\n"
 
+printf "\n\n********************************\n"
+printf "Installing IBL apps that may not be the latest.\n"
+
+sudo -Hu edxapp /edx/bin/pip.edxapp install -v --upgrade --no-deps --force-reinstall -v git+https://github.com/cisco-ibleducation/ibl_badge_server.git
+sudo -Hu edxapp /edx/bin/pip.edxapp install -v --upgrade --no-deps --force-reinstall -v git+https://github.com/cisco-ibleducation/ibl-webex-calendar-app.git
+sudo -Hu edxapp /edx/bin/pip.edxapp install --upgrade --no-deps --force-reinstall -v git+https://github.com/cisco-ibleducation/ibl-interactive-server-token-app.git
+
+printf "Done installing IBL apps that may not be the latest.\n"
+
 
 printf "\n\n********************************\n"
 printf "Run migrations for third_party_auth\n"
 
 /edx/bin/edxapp-migrate-lms
+/edx/bin/edxapp-migrate-cms
 
 printf "Done migrating third_party_auth\n"
 printf "\n********************************\n"
