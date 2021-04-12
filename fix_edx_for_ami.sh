@@ -204,22 +204,6 @@ fi
 printf "Done with $src\n"
 printf "\n********************************\n"
 
-src=/edx/app/edxapp/edx-platform/common/djangoapps/third_party_auth
-dest=/edx/app/edxapp/edx-platform/common/djangoapps/third_party_auth_old
-
-printf "\n\n********************************\n"
-printf "Working on third party auth.\n"
-printf "source directory = $src\n"
-
-sudo mv $src $dest
-
-printf "Moved $src to $dest\n"
-
-sudo -Hu edxapp /edx/bin/pip.edxapp install git+https://github.com/cisco-ibleducation/cisco-third-party-auth-master
-
-printf "Installed cisco-third-party-auth from IBL repo.\n"
-printf "\n********************************\n"
-
 src=/edx/app/edxapp/edx-platform/cms/envs/common.py
 dest=/edx/app/edxapp/edx-platform/cms/envs/common.py.orig
 
@@ -284,15 +268,6 @@ printf "Reestarting supervisor.\n"
 /edx/bin/supervisorctl restart lms cms
 
 printf "Restarted lms and cms supervisors.\n"
-
-printf "\n\n********************************\n"
-printf "Installing IBL apps that may not be the latest.\n"
-
-sudo -Hu edxapp /edx/bin/pip.edxapp install -v --upgrade --no-deps --force-reinstall -v git+https://github.com/cisco-ibleducation/ibl_badge_server.git
-sudo -Hu edxapp /edx/bin/pip.edxapp install -v --upgrade --no-deps --force-reinstall -v git+https://github.com/cisco-ibleducation/ibl-webex-calendar-app.git
-sudo -Hu edxapp /edx/bin/pip.edxapp install --upgrade --no-deps --force-reinstall -v git+https://github.com/cisco-ibleducation/ibl-interactive-server-token-app.git
-
-printf "Done installing IBL apps that may not be the latest.\n"
 
 
 printf "\n\n********************************\n"
