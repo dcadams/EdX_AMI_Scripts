@@ -273,6 +273,12 @@ if (( ! $(sudo grep -c "third_party_auth.backends.KeycloakOAuth2" $src) )); then
     sudo sed -i "/^AUTHENTICATION_BACKENDS.*/a \    \'third_party_auth.backends.KeycloakOAuth2'," $src
 fi
 
+if (( ! $(sudo grep -c "SESSION_COOKIE_AGE" $src) )); then
+    sudo sed -i '$a\\' $src
+    sudo sed -i '$a# cookie timeout to match keycloak' $src
+    sudo sed -i '$aSESSION_COOKIE_AGE = 1800' $src
+fi
+
 printf "Done with $src\n"
 printf "\n********************************\n"
 
